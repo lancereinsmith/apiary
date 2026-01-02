@@ -1,0 +1,15 @@
+{
+  "endpoints": [
+    {
+      "path": "/api/crypto",
+      "method": "GET",
+      "service": "crypto",
+      "enabled": true,
+      "requires_auth": false,
+      "description": "Get cryptocurrency price data. Accepts optional 'symbol' parameter (e.g., BTC, ETH, SOL). Defaults to BTC if not provided.",
+      "tags": ["crypto"],
+      "summary": "Cryptocurrency price data"
+    }
+  ]
+}
+

@@ -1,0 +1,23 @@
+[Unit]
+Description=Gunicorn instance to serve api.domain.com
+After=network.target
+
+[Service]
+User=ubuntu
+Group=nginx
+WorkingDirectory=/home/ubuntu/api.domain.com
+Environment="PATH=/home/ubuntu/api.domain.com/.venv/bin"
+Environment="SECRET_KEY=your_secret_key_here"
+ExecStart=/home/ubuntu/api.domain.com/.venv/bin/gunicorn -b unix:api.domain.com.sock -w 1 -k uvicorn.workers.UvicornWorker -m 007 main:api --name apiservice --chdir /home/ubuntu/api.domain.com --access-logfile /home/ubuntu/logs/api/access.log --error-logfile /home/ubuntu/logs/api/errors.log --user ubuntu
+
+ExecReload=/bin/kill -s HUP $MAINPID`
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+Restart=always
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target

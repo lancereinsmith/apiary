@@ -1,0 +1,521 @@
+{% extends "shared/layout.html" %}
+
+{% block content %}
+
+<div class="api-home">
+    <div class="hero-section">
+        <h1 class="font-semi-bold">🐝 Apiary API</h1>
+        <p class="lead">Personal API service for various projects</p>
+        <p class="subtitle">Built with FastAPI</p>
+    </div>
+
+    <div class="routes-section">
+        <h2 class="section-title">API Documentation</h2>
+        <div class="route-grid">
+            <div class="route-card">
+                <h3><a href="/docs">Interactive API Docs</a></h3>
+                <p>Swagger UI - Test endpoints interactively with a beautiful interface</p>
+            </div>
+            <div class="route-card">
+                <h3><a href="/redoc">Alternative Documentation</a></h3>
+                <p>ReDoc - Clean, responsive documentation with a three-panel design</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Health & Monitoring</h2>
+        <div class="route-grid">
+            <div class="route-card">
+                <h3><a href="/health">Health Check</a></h3>
+                <p>Basic health status endpoint - returns the current health of the API</p>
+            </div>
+            <div class="route-card">
+                <h3><a href="/health/live">Liveness Probe</a></h3>
+                <p>Kubernetes liveness probe - checks if the application is alive</p>
+            </div>
+            <div class="route-card">
+                <h3><a href="/health/ready">Readiness Probe</a></h3>
+                <p>Kubernetes readiness probe with dependency checks and uptime info</p>
+            </div>
+            <div class="route-card">
+                <h3><a href="/metrics">Application Metrics</a></h3>
+                <p>Request counts, error rates, response times, and endpoint statistics</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Authentication</h2>
+        <div class="route-grid">
+            <div class="route-card route-card-interactive">
+                <h3><a href="#" id="validateLink">Validate API Key</a></h3>
+                <p>Check if an API key is valid (optional authentication)</p>
+                
+                <div class="api-key-tester">
+                    <p class="tester-label">Enter your API key:</p>
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="apiKeyInput" 
+                            class="api-key-input" 
+                            placeholder="Enter your API key..."
+                            autocomplete="off"
+                        >
+                    </div>
+                    <div id="validationResult" class="validation-result"></div>
+                </div>
+            </div>
+            <div class="route-card route-card-interactive">
+                <h3><a href="#" id="statusLink">Authentication Status</a></h3>
+                <p>Verify authentication status (requires valid API key)</p>
+                
+                <div class="api-key-tester">
+                    <p class="tester-label">Enter your API key:</p>
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="apiKeyInput2" 
+                            class="api-key-input" 
+                            placeholder="Enter your API key..."
+                            autocomplete="off"
+                        >
+                    </div>
+                    <div id="statusResult" class="validation-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Dynamic Endpoints</h2>
+        <div class="route-grid">
+            <div class="route-card">
+                <h3><a href="/endpoints">List Endpoints</a></h3>
+                <p>Discover all configurable endpoints and available services</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-section">
+        <p class="version-info">API Version: {{ version }}</p>
+        <p class="tech-stack">FastAPI • Python 3 • Jinja2 • Bootstrap</p>
+    </div>
+</div>
+
+<style>
+    .api-home {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .hero-section {
+        text-align: center;
+        padding: 40px 0 60px 0;
+        border-bottom: 2px solid #e0e0e0;
+        margin-bottom: 50px;
+    }
+
+    .hero-section h1 {
+        font-size: 56px;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+
+    .hero-section .lead {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    .hero-section .subtitle {
+        font-size: 16px;
+        color: #888;
+        margin-top: 5px;
+    }
+
+    .routes-section {
+        margin-bottom: 60px;
+    }
+
+    .section-title {
+        font-size: 28px;
+        margin-top: 40px;
+        margin-bottom: 25px;
+        color: #2c3e50;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 10px;
+    }
+
+    .route-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .route-card {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .route-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+        border-color: #007bff;
+    }
+
+    .route-card h3 {
+        font-size: 20px;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    .route-card h3 a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .route-card h3 a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    .route-card p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .footer-section {
+        text-align: center;
+        padding: 30px 0;
+        border-top: 2px solid #e0e0e0;
+        color: #888;
+    }
+
+    .footer-section .version-info {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .footer-section .tech-stack {
+        font-size: 12px;
+        color: #aaa;
+    }
+
+    /* API Key Tester Styles */
+    .route-card-interactive {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .api-key-tester {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .tester-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 10px;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .api-key-input {
+        flex: 1;
+        padding: 10px 12px;
+        border: 2px solid #ced4da;
+        border-radius: 4px;
+        font-size: 13px;
+        background: white;
+        color: #495057;
+        transition: all 0.3s ease;
+        font-family: 'Courier New', monospace;
+    }
+
+    .api-key-input::placeholder {
+        color: #adb5bd;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .api-key-input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    .validate-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 600;
+        background: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .validate-btn:hover {
+        background: #0056b3;
+    }
+
+    .validate-btn:active {
+        transform: scale(0.98);
+    }
+
+    .validate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .validation-result {
+        padding: 10px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        display: none;
+        animation: slideIn 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .validation-result.show {
+        display: block;
+    }
+
+    .validation-result.success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+
+    .validation-result.error {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+
+    .validation-result.loading {
+        background: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+    }
+
+    .request-section,
+    .response-section {
+        margin-bottom: 15px;
+    }
+
+    .request-section:last-child,
+    .response-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .request-section strong,
+    .response-section strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+    .json-output {
+        margin: 0;
+        padding: 12px;
+        font-family: 'Courier New', Monaco, monospace;
+        font-size: 12px;
+        line-height: 1.4;
+        text-align: left;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-x: auto;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-section h1 {
+            font-size: 36px;
+        }
+
+        .hero-section .lead {
+            font-size: 20px;
+        }
+
+        .route-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .section-title {
+            font-size: 24px;
+        }
+
+        .input-group {
+            flex-direction: column;
+        }
+
+        .validate-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const apiKeyInput2 = document.getElementById('apiKeyInput2');
+        const validateLink = document.getElementById('validateLink');
+        const statusLink = document.getElementById('statusLink');
+        const validationResult = document.getElementById('validationResult');
+        const statusResult = document.getElementById('statusResult');
+
+        // Validate API Key endpoint
+        validateLink.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (!apiKey) {
+                showResult(validationResult, 'Please enter an API key first', 'error');
+                return;
+            }
+
+            showResult(validationResult, 'Loading...', 'loading');
+
+            try {
+                const requestInfo = {
+                    method: 'GET',
+                    url: '/auth/validate',
+                    headers: {
+                        'X-API-Key': apiKey
+                    }
+                };
+
+                const response = await fetch('/auth/validate', {
+                    method: 'GET',
+                    headers: {
+                        'X-API-Key': apiKey
+                    }
+                });
+
+                const data = await response.json();
+                displayJSON(validationResult, data, response.ok, requestInfo);
+            } catch (error) {
+                showResult(validationResult, 'Network error: ' + error.message, 'error');
+            }
+        });
+
+        // Authentication Status endpoint
+        statusLink.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const apiKey = apiKeyInput2.value.trim();
+            
+            if (!apiKey) {
+                showResult(statusResult, 'Please enter an API key first', 'error');
+                return;
+            }
+
+            showResult(statusResult, 'Loading...', 'loading');
+
+            try {
+                const requestInfo = {
+                    method: 'GET',
+                    url: '/auth/status',
+                    headers: {
+                        'X-API-Key': apiKey
+                    }
+                };
+
+                const response = await fetch('/auth/status', {
+                    method: 'GET',
+                    headers: {
+                        'X-API-Key': apiKey
+                    }
+                });
+
+                const data = await response.json();
+                displayJSON(statusResult, data, response.ok, requestInfo);
+            } catch (error) {
+                showResult(statusResult, 'Network error: ' + error.message, 'error');
+            }
+        });
+
+        // Enter key support
+        apiKeyInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                validateLink.click();
+            }
+        });
+
+        apiKeyInput2.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                statusLink.click();
+            }
+        });
+
+        // Clear results when typing
+        apiKeyInput.addEventListener('input', function() {
+            validationResult.classList.remove('show');
+        });
+
+        apiKeyInput2.addEventListener('input', function() {
+            statusResult.classList.remove('show');
+        });
+
+        function displayJSON(element, data, isSuccess, requestInfo) {
+            let html = '';
+            
+            // Show request details
+            if (requestInfo) {
+                html += '<div class="request-section">';
+                html += '<strong>📤 Request:</strong>';
+                html += '<pre class="json-output">' + escapeHtml(JSON.stringify(requestInfo, null, 2)) + '</pre>';
+                html += '</div>';
+            }
+            
+            // Show response
+            html += '<div class="response-section">';
+            html += '<strong>📥 Response:</strong>';
+            html += '<pre class="json-output">' + escapeHtml(JSON.stringify(data, null, 2)) + '</pre>';
+            html += '</div>';
+            
+            element.innerHTML = html;
+            element.className = `validation-result show ${isSuccess ? 'success' : 'error'}`;
+        }
+
+        function showResult(element, message, type) {
+            element.textContent = message;
+            element.className = `validation-result show ${type}`;
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    });
+</script>
+
+{% endblock %}

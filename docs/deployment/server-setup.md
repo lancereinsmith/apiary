@@ -42,7 +42,7 @@ nano settings.json
 Copy nginx configuration:
 
 ```bash
-sudo cp _server/nginx/api.domain.com.nginx /etc/nginx/sites-available/apiary
+sudo cp _server/nginx/api.domain.nginx /etc/nginx/sites-available/apiary
 sudo ln -s /etc/nginx/sites-available/apiary /etc/nginx/sites-enabled/
 
 # Edit and update paths
@@ -56,7 +56,7 @@ sudo systemctl reload nginx
 ### 4. Configure systemd
 
 ```bash
-sudo cp _server/units/api.domain.com.service /etc/systemd/system/apiary.service
+sudo cp _server/units/api.domain.service /etc/systemd/system/apiary.service
 
 # Edit and update paths
 sudo nano /etc/systemd/system/apiary.service

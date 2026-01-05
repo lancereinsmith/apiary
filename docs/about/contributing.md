@@ -20,7 +20,7 @@ git clone https://github.com/lancereinsmith/apiary.git
 cd apiary
 uv sync
 cp settings_template.json settings.json
-python main.py
+uv run apiary serve --reload
 ```
 
 ## Code Style

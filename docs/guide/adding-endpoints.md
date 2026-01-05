@@ -170,13 +170,14 @@ async def cached_endpoint(response: Response):
 
 ### Register Router
 
-Add your router to `main.py`:
+Add your router to `app.py` (in `_configure_routing` function):
 
 ```python
 from routers import example
 
-def configure_routing():
+def _configure_routing(api: fastapi.FastAPI, settings) -> None:
     """Configure application routes."""
+    # ... existing routers ...
     api.include_router(example.router)
 ```
 
@@ -474,7 +475,7 @@ Configuration-based approach:
 
 **Code-based:**
 
-- Verify router is registered in `main.py`
+- Verify router is registered in `app.py` (in `_configure_routing` function)
 - Check for syntax errors
 - Restart the server
 

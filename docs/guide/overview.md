@@ -344,7 +344,8 @@ Choose your approach:
 
 ```bash
 # Start server
-python main.py
+uv run apiary serve --reload
+# Or: uvicorn app:api --reload
 
 # Run tests
 pytest

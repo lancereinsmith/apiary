@@ -35,7 +35,7 @@ export RATE_LIMIT_ENABLED=true
 
 ```bash
 # In systemd service file
-ExecStart=gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:api
+ExecStart=gunicorn -w 4 -k uvicorn.workers.UvicornWorker app:api
 ```
 
 Workers = (2 × CPU cores) + 1

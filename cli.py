@@ -182,7 +182,7 @@ def docs_deploy(message: str):
 @click.option("--reload", is_flag=True, help="Enable auto-reload")
 def serve(host: str, port: int, reload: bool):
     """Start the API server."""
-    cmd = ["uvicorn", "main:api", f"--host={host}", f"--port={port}"]
+    cmd = ["uvicorn", "app:api", f"--host={host}", f"--port={port}"]
     if reload:
         cmd.append("--reload")
     click.echo(f"🚀 Starting Apiary API server at http://{host}:{port}")
@@ -231,3 +231,4 @@ def clean():
 
 if __name__ == "__main__":
     cli()
+

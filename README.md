@@ -51,7 +51,9 @@ cp settings_template.json settings.json
 cp config/endpoints_template.json config/endpoints.json
 
 # Run the application
-python main.py
+uv run apiary serve --reload
+# Or using uvicorn directly
+uvicorn app:api --reload
 ```
 
 Visit `http://localhost:8000/docs` for interactive API documentation.
@@ -125,7 +127,8 @@ apiary/
 ├── models/              # Request/response models
 ├── templates/           # HTML templates
 ├── static/              # Static files
-└── main.py              # Application entry point
+├── app.py               # FastAPI application factory
+└── cli.py               # CLI commands
 ```
 
 ## Built-in Endpoints

@@ -51,7 +51,8 @@ apiary/
 │   ├── conftest.py
 │   ├── unit/
 │   └── integration/
-├── main.py              # Application entry point
+├── app.py               # FastAPI application factory
+├── cli.py               # CLI commands
 ├── settings.json        # Configuration (not in repo)
 ├── pyproject.toml       # Project dependencies
 └── README.md            # Project README
@@ -59,9 +60,15 @@ apiary/
 
 ## Key Files
 
-### `main.py`
+### `app.py`
 
-Application entry point. Configures FastAPI app, middleware, and routers.
+FastAPI application factory. Creates and configures the FastAPI app instance. This is the main application module that can be imported by uvicorn, gunicorn, or other ASGI servers.
+
+**Usage:**
+- Import: `from app import api`
+- Run with uvicorn: `uvicorn app:api`
+- Run with gunicorn: `gunicorn app:api`
+- Run with CLI: `uv run apiary serve`
 
 ### `config/settings.py`
 
@@ -99,7 +106,7 @@ FastAPI routers for handling HTTP requests.
 
 1. Create file in `routers/`
 2. Create `APIRouter` instance
-3. Register in `main.py`
+3. Register in `app.py` (in `_configure_routing` function)
 
 ### New Model
 

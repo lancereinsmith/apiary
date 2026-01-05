@@ -52,7 +52,7 @@ cp settings_template.json settings.json
 cp config/endpoints_template.json config/endpoints.json
 
 # Run the application
-python main.py
+uv run apiary serve --reload
 ```
 
 Visit `http://localhost:8000/docs` for interactive API documentation.
@@ -130,7 +130,8 @@ apiary/
 ├── services/            # Business logic services
 ├── models/              # Request/response models
 ├── templates/           # HTML templates
-└── main.py              # Application entry point
+├── app.py               # FastAPI application factory
+└── cli.py               # CLI commands
 ```
 
 ## Built-in Endpoints

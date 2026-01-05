@@ -121,7 +121,7 @@ export RATE_LIMIT_ENABLED=true
 export RATE_LIMIT_PER_MINUTE=100
 export RATE_LIMIT_PER_MINUTE_AUTHENTICATED=500
 
-python main.py
+uv run apiary serve --reload
 ```
 
 Environment variables take precedence over `settings.json`.
@@ -383,13 +383,14 @@ Configuration is loaded once at startup. To apply changes:
 ```bash
 # Restart the server
 # Press Ctrl+C to stop, then:
-python main.py
+uv run apiary serve --reload
 ```
 
 For development, use auto-reload:
 
 ```bash
-uvicorn main:api --reload
+uvicorn app:api --reload
+# Or: uv run apiary serve --reload
 ```
 
 ## Advanced Configuration
@@ -411,7 +412,7 @@ Load with:
 # Using python-dotenv
 pip install python-dotenv
 
-# Add to main.py
+# Add to app.py (in create_app function)
 from dotenv import load_dotenv
 load_dotenv()
 ```

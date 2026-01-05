@@ -1,10 +1,9 @@
-"""Main application entry point."""
+"""FastAPI application factory and configuration."""
 
 import logging
 from contextlib import asynccontextmanager
 
 import fastapi
-import uvicorn
 from fastapi.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 
@@ -27,54 +26,62 @@ from core.request_validation import RequestValidationMiddleware
 from core.router_factory import DynamicRouter
 from routers import auth, endpoints, health, home, metrics
 
-# Initialize settings
-settings = initialize_settings()
 
-# Setup logging
-setup_logging(level="INFO")
+def create_app() -> fastapi.FastAPI:
+    """Create and configure the FastAPI application.
+    
+    This function initializes settings, sets up logging, creates the FastAPI
+    app instance, and configures all middleware, exception handlers, and routes.
+    
+    Returns:
+        Configured FastAPI application instance.
+    """
+    # Initialize settings
+    settings = initialize_settings()
+    
+    # Setup logging
+    setup_logging(level="INFO")
+    
+    # Get logger after setup
+    logger = logging.getLogger(__name__)
+    
+    @asynccontextmanager
+    async def lifespan(app: fastapi.FastAPI):
+        """Application lifespan manager for startup/shutdown events."""
+        # Startup
+        logger.info("Application starting up...")
+        yield
+        # Shutdown
+        logger.info("Application shutting down...")
+        await http_client_dependency.close()
+    
+    # Create FastAPI app
+    api = fastapi.FastAPI(
+        title="Apiary",
+        description="Personal API service for various projects",
+        version=__version__,
+        lifespan=lifespan,
+        docs_url="/docs",
+        redoc_url="/redoc",
+        openapi_url="/openapi.json",
+    )
+    
+    # Configure the application
+    _configure_exception_handlers(api)
+    _configure_middleware(api)
+    _configure_routing(api, settings)
+    
+    return api
 
-# Get logger after setup
-logger = logging.getLogger(__name__)
 
-
-@asynccontextmanager
-async def lifespan(app: fastapi.FastAPI):
-    """Application lifespan manager for startup/shutdown events."""
-    # Startup
-    logger.info("Application starting up...")
-    yield
-    # Shutdown
-    logger.info("Application shutting down...")
-    await http_client_dependency.close()
-
-
-# Create FastAPI app
-api = fastapi.FastAPI(
-    title="Apiary",
-    description="Personal API service for various projects",
-    version=__version__,
-    lifespan=lifespan,
-    docs_url="/docs",
-    redoc_url="/redoc",
-    openapi_url="/openapi.json",
-)
-
-
-def configure():
-    """Configure the application."""
-    configure_exception_handlers()
-    configure_middleware()
-    configure_routing()
-
-
-def configure_exception_handlers():
+def _configure_exception_handlers(api: fastapi.FastAPI) -> None:
     """Configure global exception handlers."""
-
+    
     @api.exception_handler(APIException)
     async def api_exception_handler(request: fastapi.Request, exc: APIException):
         """Handle API exceptions."""
         request_id = getattr(request.state, "request_id", "unknown")
-
+        
         error_response = {
             "error": {
                 "message": exc.message,
@@ -83,16 +90,16 @@ def configure_exception_handlers():
                 "request_id": request_id,
             }
         }
-
+        
         # Add details if present
         if exc.details:
             error_response["error"]["details"] = exc.details
-
+        
         return JSONResponse(
             status_code=exc.status_code,
             content=error_response,
         )
-
+    
     @api.exception_handler(Exception)
     async def general_exception_handler(request: fastapi.Request, exc: Exception):
         """Handle general exceptions."""
@@ -109,11 +116,11 @@ def configure_exception_handlers():
         )
 
 
-def configure_middleware():
+def _configure_middleware(api: fastapi.FastAPI) -> None:
     """Configure application middleware."""
     # CORS must be added first
     configure_cors(api, allowed_origins=None)  # Allow all origins for now
-
+    
     # Add other middleware (order matters - first added is last executed)
     api.add_middleware(SecurityHeadersMiddleware)
     api.add_middleware(RequestValidationMiddleware)  # Request validation
@@ -123,26 +130,25 @@ def configure_middleware():
     api.add_middleware(LoggingMiddleware)
 
 
-def configure_routing():
+def _configure_routing(api: fastapi.FastAPI, settings) -> None:
     """Configure application routes."""
     api.mount("/static", StaticFiles(directory="static"), name="static")
-
+    
     # Conditionally include landing page based on settings
     if settings.enable_landing_page:
         api.include_router(home.router)
-
+    
     api.include_router(health.router)
     api.include_router(metrics.router)
     api.include_router(auth.router)
     api.include_router(endpoints.router)
-
+    
     # Load and register configurable endpoints
     dynamic_router = DynamicRouter(api)
     dynamic_router.load_and_register()
 
 
-if __name__ == "__main__":
-    configure()
-    uvicorn.run(api, port=8000, host="127.0.0.1")
-else:
-    configure()
+# Create the application instance
+# This can be imported as: from app import api
+api = create_app()
+

@@ -1,1 +1,1 @@
-"""Test suite for api.domain.com."""
+"""Test suite for api.domain."""

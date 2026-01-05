@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 from httpx import AsyncClient
 
 from config import Settings
-from main import api
+from app import api
 
 
 @pytest.fixture

@@ -23,7 +23,9 @@ cp settings_template.json settings.json
 cp config/endpoints_template.json config/endpoints.json
 
 # Run the application
-python main.py
+uv run apiary serve --reload
+# Or using uvicorn directly
+uvicorn app:api --reload
 ```
 
 Visit `http://localhost:8000` to see your API running.
@@ -104,7 +106,11 @@ Edit `config/endpoints.json` to configure dynamic endpoints:
 ### Run the Application
 
 ```bash
-python main.py
+# Using CLI (recommended for development)
+uv run apiary serve --reload
+
+# Or using uvicorn directly
+uvicorn app:api --reload
 ```
 
 Expected output:
@@ -136,7 +142,9 @@ pytest --cov        # With coverage
 
 ```bash
 # Use different port
-uvicorn main:api --port 8001
+uvicorn app:api --port 8001
+# Or use CLI
+uv run apiary serve 127.0.0.1 8001
 ```
 
 ### Settings File Not Found

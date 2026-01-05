@@ -22,7 +22,7 @@ COPY . /app
 
 RUN pip install uv && uv sync
 
-CMD ["python", "main.py"]
+CMD ["uvicorn", "app:api", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
 ### 3. Cloud Platforms

@@ -11,7 +11,11 @@ Make sure you've completed the [Installation](installation.md) guide.
 First, start the development server:
 
 ```bash
-python main.py
+# Option 1: Using CLI (recommended)
+uv run apiary serve --reload
+
+# Option 2: Using uvicorn directly
+uvicorn app:api --reload
 ```
 
 You should see:
@@ -128,8 +132,9 @@ Edit `config/endpoints.json` to add a new endpoint:
 ### Step 4: Restart and Test
 
 ```bash
-# Restart the server (Ctrl+C then python main.py)
-python main.py
+# Restart the server (Ctrl+C then restart)
+uv run apiary serve --reload
+```
 
 # Test your new endpoint
 curl http://localhost:8000/api/hello
@@ -355,7 +360,8 @@ Edit `config/endpoints.json` and set `enabled: false`:
 lsof -i:8000
 
 # Use different port
-uvicorn main:api --port 8001
+uvicorn app:api --port 8001
+# Or: uv run apiary serve 127.0.0.1 8001
 ```
 
 ### Endpoint Not Found

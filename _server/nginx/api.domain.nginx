@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name api.domain.com;
+    server_name api.domain;
     server_tokens off;
     charset utf-8;
 
@@ -8,7 +8,7 @@ server {
         gzip            on;
         gzip_buffers    8 256k;
 
-        alias /home/ubuntu/api.domain.com/static;
+        alias /home/ubuntu/api.domain/static;
         expires 365d;
     }
     location / {
@@ -19,7 +19,7 @@ server {
         gzip_buffers    8 256k;
 
         include proxy_params;
-        proxy_pass http://unix:/home/ubuntu/api.domain.com/api.domain.com.sock;
+        proxy_pass http://unix:/home/ubuntu/api.domain/api.domain.sock;
     }
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header X-Content-Type-Options "nosniff" always;

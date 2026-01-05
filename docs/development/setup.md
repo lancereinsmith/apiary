@@ -15,11 +15,11 @@ cp config/endpoints_template.json config/endpoints.json
 ## Running in Development
 
 ```bash
-# Direct execution
-python main.py
+# With auto-reload (recommended)
+uv run apiary serve --reload
 
-# With auto-reload
-uvicorn main:api --reload --port 8000
+# Or using uvicorn directly
+uvicorn app:api --reload --port 8000
 ```
 
 ## Apiary Project Structure
@@ -54,13 +54,20 @@ apiary/
 ├── tests/               # Test suite
 │   ├── unit/            # Unit tests
 │   └── integration/     # Integration tests
-└── main.py              # Application entry point
+├── app.py               # FastAPI application factory
+└── cli.py               # CLI commands
 ```
 
 ## Key Files
 
-### `main.py`
-Application entry point. Creates the FastAPI app, registers routers, and starts the server.
+### `app.py`
+FastAPI application factory. Creates and configures the FastAPI app instance. This is the main application module that can be imported by uvicorn, gunicorn, or other ASGI servers.
+
+**Usage:**
+- Import: `from app import api`
+- Run with uvicorn: `uvicorn app:api`
+- Run with gunicorn: `gunicorn app:api`
+- Run with CLI: `uv run apiary serve`
 
 ### `config/settings.py`
 Pydantic Settings class that loads configuration from `settings.json` and environment variables.
@@ -150,11 +157,14 @@ async def custom_endpoint():
     return {"message": "Custom endpoint"}
 ```
 
-Register in `main.py`:
+Register in `app.py` (in `_configure_routing` function):
 
 ```python
 from routers import custom
-app.include_router(custom.router)
+
+def _configure_routing(api: fastapi.FastAPI, settings) -> None:
+    # ... existing routers ...
+    api.include_router(custom.router)
 ```
 
 ## Next Steps

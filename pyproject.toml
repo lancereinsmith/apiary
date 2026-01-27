@@ -1,0 +1,87 @@
+[build-system]
+requires = [
+    "hatchling",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "apiary"
+version = "0.1.0"
+description = "Apiary - Personal API service for various projects"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.128.0",
+    "uvicorn[standard]>=0.40.0",
+    "jinja2>=3.1.6",
+    "aiofiles>=25.1.0",
+    "requests>=2.32.5",
+    "beautifulsoup4>=4.14.3",
+    "gunicorn>=24.1.1",
+    "uvloop>=0.22.1",
+    "httptools>=0.7.1",
+    "httpx>=0.28.1",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.12.0",
+    "python-dotenv>=1.2.1",
+    "watchdog>=6.0.0",
+    "click>=8.3.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.14",
+    "rumdl>=0.1.1",
+    "ty>=0.0.13",
+]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.1",
+    "mkdocs-click>=0.8.1",
+    "mkdocstrings[python]>=1.0.2",
+]
+
+[tool.uv]
+default-groups = ["dev", "docs"]
+
+[project.scripts]
+apiary = "cli:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+
+# ——— Ruff: lint and format (replaces black, isort, flake8) ———
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]
+extend-ignore = ["B008"]  # Depends() in FastAPI route/dependency defaults is intentional
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# ——— ty: type checking (replaces mypy, pyright) ———
+[tool.ty.environment]
+python-version = "3.12"
+
+[tool.ty.src]
+exclude = ["tests"]
+
+# ——— rumdl: markdown format (mkdocs flavor) ———
+[tool.rumdl]
+flavor = "mkdocs"
+respect-gitignore = true
+disable = ["MD007", "MD013", "MD031", "MD033", "MD046", "MD053"]
+exclude = [".git", ".github", "node_modules", "vendor", "dist", "build", "CHANGELOG.md", "LICENSE.md"]
+
+# ——— Pytest (optional: remove [tool.pytest.ini_options] and the test group if you have no tests) ———
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-v", "--tb=short", "--strict-markers", "--strict-config"]

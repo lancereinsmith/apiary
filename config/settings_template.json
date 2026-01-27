@@ -1,0 +1,11 @@
+{
+  "api_keys": "your-api-key-1,your-api-key-2",
+  "enable_landing_page": true,
+  "enable_docs": true,
+  "enable_redoc": true,
+  "enable_openapi": true,
+  "enabled_routers": ["health", "metrics", "auth", "endpoints"],
+  "rate_limit_enabled": true,
+  "rate_limit_per_minute": 60,
+  "rate_limit_per_minute_authenticated": 300
+}

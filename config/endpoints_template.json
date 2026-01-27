@@ -1,0 +1,16 @@
+{
+  "endpoints": [
+    {
+      "path": "/api/crypto",
+      "method": "GET",
+      "service": "crypto",
+      "enabled": true,
+      "requires_auth": false,
+      "description": "Get cryptocurrency price data. Accepts optional 'symbol' parameter (e.g., BTC, ETH, SOL). Defaults to BTC if not provided.",
+      "tags": ["crypto"],
+      "summary": "Cryptocurrency price data"
+    }
+  ],
+  "_comment": "Endpoint-specific API keys: Add 'api_keys' field to any endpoint to override global keys. Value can be comma-separated keys or a path to a .txt file with one key per line. Example: 'api_keys': 'key1,key2,key3' or 'api_keys': 'config/api_keys.txt'"
+}
+

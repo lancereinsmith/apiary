@@ -2,6 +2,8 @@
 
 from core.services.base import BaseService
 
+__all__ = ["BaseService", "register_service", "get_service", "list_services"]
+
 # Service registry
 _service_registry: dict[str, type[BaseService]] = {}
 

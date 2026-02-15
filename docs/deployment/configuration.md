@@ -76,7 +76,13 @@ export ENABLE_REDOC=false
 ExecStart=gunicorn -w 4 -k uvicorn.workers.UvicornWorker app:api
 ```
 
-Workers = (2 × CPU cores) + 1
+Workers = (2 x CPU cores) + 1
+
+!!! note "Multi-Worker Consideration"
+    Rate limiting and metrics use in-memory storage that is not shared between
+    workers. With 4 workers, clients effectively get 4x the configured rate
+    limit and `/metrics` shows per-worker data. Use a single worker if accurate
+    rate limiting is critical, or use Redis for shared state.
 
 ### nginx
 

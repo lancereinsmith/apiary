@@ -108,9 +108,7 @@ jobs:
           uv sync --all-groups
 
       - name: Run security checks
-        run: |
-          uv pip install safety
-          uv run safety check
+        run: uv run pip-audit
 
   integration:
     runs-on: ubuntu-latest

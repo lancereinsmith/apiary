@@ -15,6 +15,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  pull-requests: write  # required for docs-preview to comment on PRs
 
 jobs:
   build-docs:

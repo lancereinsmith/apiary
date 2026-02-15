@@ -1,12 +1,12 @@
 """Endpoint configuration models and validation."""
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
 
-class HTTPMethod(str, Enum):
+class HTTPMethod(StrEnum):
     """HTTP methods supported by endpoints."""
 
     GET = "GET"

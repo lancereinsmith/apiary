@@ -1,3 +1,4 @@
+# Python version should stay in sync with pyproject.toml requires-python (>=3.12)
 FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 
 WORKDIR /app

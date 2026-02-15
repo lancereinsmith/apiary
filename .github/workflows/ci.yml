@@ -110,7 +110,7 @@ jobs:
       - name: Run security checks
         run: |
           uv pip install safety
-          uv run safety check
+          uv run safety scan
 
   integration:
     runs-on: ubuntu-latest

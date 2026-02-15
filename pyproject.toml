@@ -6,17 +6,17 @@ build-backend = "hatchling.build"
 
 [project]
 name = "apiary"
-version = "0.1.0"
+version = "0.1.1"
 description = "Apiary - Personal API service for various projects"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.128.0",
+    "fastapi>=0.129.0",
     "uvicorn[standard]>=0.40.0",
     "jinja2>=3.1.6",
     "aiofiles>=25.1.0",
     "requests>=2.32.5",
     "beautifulsoup4>=4.14.3",
-    "gunicorn>=24.1.1",
+    "gunicorn>=25.1.0",
     "uvloop>=0.22.1",
     "httptools>=0.7.1",
     "httpx>=0.28.1",
@@ -30,17 +30,17 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
-    "pytest-asyncio>=1.3.0",
+    "pytest-asyncio>=0.24.0",
     "pytest-cov>=7.0.0",
-    "ruff>=0.14.14",
-    "rumdl>=0.1.1",
-    "ty>=0.0.13",
+    "ruff>=0.15.1",
+    "rumdl>=0.1.21",
+    "ty>=0.0.17",
 ]
 docs = [
     "mkdocs>=1.6.1",
     "mkdocs-material>=9.7.1",
-    "mkdocs-click>=0.8.1",
-    "mkdocstrings[python]>=1.0.2",
+    "mkdocs-click>=0.9.0",
+    "mkdocstrings[python]>=1.0.3",
 ]
 
 [tool.uv]
@@ -84,4 +84,10 @@ exclude = [".git", ".github", "node_modules", "vendor", "dist", "build", "CHANGE
 # ——— Pytest (optional: remove [tool.pytest.ini_options] and the test group if you have no tests) ———
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+asyncio_mode = "auto"
 addopts = ["-v", "--tb=short", "--strict-markers", "--strict-config"]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow running tests",
+]

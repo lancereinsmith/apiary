@@ -101,7 +101,7 @@ Response:
 
 **Endpoint:** `GET /health/ready`
 
-Kubernetes-compatible readiness probe. Checks if the application and its dependencies are ready to serve traffic.
+Kubernetes-compatible readiness probe. Checks configuration validity and reports registered services.
 
 ```bash
 curl http://localhost:8000/health/ready
@@ -112,22 +112,39 @@ Response (healthy):
 ```json
 {
   "status": "ready",
+  "version": "0.1.1",
+  "uptime_seconds": 3600,
   "dependencies": {
-    "external_apis": "healthy"
-  },
-  "uptime_seconds": 3600
+    "configuration": {
+      "status": "healthy"
+    },
+    "services": {
+      "status": "healthy",
+      "registered": ["crypto", "hello"],
+      "count": 2
+    }
+  }
 }
 ```
 
-Response (degraded):
+Response (unready):
 
 ```json
 {
-  "status": "degraded",
+  "status": "unready",
+  "version": "0.1.1",
+  "uptime_seconds": 3600,
   "dependencies": {
-    "external_apis": "unhealthy"
-  },
-  "uptime_seconds": 3600
+    "configuration": {
+      "status": "unhealthy",
+      "error": "..."
+    },
+    "services": {
+      "status": "healthy",
+      "registered": [],
+      "count": 0
+    }
+  }
 }
 ```
 

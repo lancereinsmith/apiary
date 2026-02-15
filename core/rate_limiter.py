@@ -11,7 +11,13 @@ from config import get_settings
 
 
 class RateLimiter:
-    """Simple in-memory rate limiter."""
+    """Simple in-memory rate limiter.
+
+    Note: State is per-process. When running multiple Gunicorn workers,
+    each worker maintains its own rate limit counters, effectively
+    multiplying the allowed rate by the number of workers. Use a shared
+    store (e.g. Redis) if accurate cross-worker rate limiting is needed.
+    """
 
     def __init__(self):
         """Initialize rate limiter."""

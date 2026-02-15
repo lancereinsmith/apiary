@@ -31,8 +31,10 @@ def cli():
 
 
 @cli.command()
-@click.argument("host", default="127.0.0.1")
-@click.argument("port", type=int, default=8000)
+@click.option("--host", "-h", default="127.0.0.1", show_default=True, help="Bind host")
+@click.option(
+    "--port", "-p", type=int, default=8000, show_default=True, help="Bind port"
+)
 @click.option("--reload", is_flag=True, help="Enable auto-reload")
 def serve(host: str, port: int, reload: bool):
     """Start the API server."""

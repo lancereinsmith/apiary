@@ -4,13 +4,11 @@ import time
 from typing import Any
 
 import fastapi
-import httpx
 from fastapi import Depends
 from pydantic import BaseModel
 
 from __version__ import __version__
 from config import Settings, get_settings
-from core.dependencies import http_client_dependency
 
 
 class HealthStatus(BaseModel):
@@ -73,35 +71,18 @@ async def liveness() -> HealthStatus:
 )
 async def readiness(
     settings: Settings = Depends(get_settings),
-    client: httpx.AsyncClient = Depends(http_client_dependency),
 ) -> HealthDetail:
-    """Readiness probe with dependency health checks."""
+    """Readiness probe with dependency health checks.
+
+    Checks configuration validity and reports registered services.
+    External service health is not checked here to avoid coupling
+    the readiness probe to specific service implementations.
+    """
     dependencies: dict[str, Any] = {}
     overall_status = "ready"
 
-    # Check external API dependencies
-    try:
-        # Check CoinLore Crypto API
-        resp = await client.get(
-            "https://api.coinlore.net/api/tickers/",
-            timeout=5.0,
-        )
-        dependencies["crypto_api"] = {
-            "status": "healthy" if resp.status_code == 200 else "unhealthy",
-            "status_code": resp.status_code,
-        }
-        if resp.status_code != 200:
-            overall_status = "degraded"
-    except Exception as e:
-        dependencies["crypto_api"] = {
-            "status": "unhealthy",
-            "error": str(e),
-        }
-        overall_status = "degraded"
-
     # Check configuration
     try:
-        # Verify settings are loaded correctly
         _ = settings.api_keys
         dependencies["configuration"] = {"status": "healthy"}
     except Exception as e:
@@ -110,6 +91,16 @@ async def readiness(
             "error": str(e),
         }
         overall_status = "unready"
+
+    # Report registered services (informational, not a health gate)
+    from core.services import list_services
+
+    registered = list_services()
+    dependencies["services"] = {
+        "status": "healthy",
+        "registered": registered,
+        "count": len(registered),
+    }
 
     uptime = time.time() - _start_time
 

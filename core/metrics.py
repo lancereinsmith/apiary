@@ -34,7 +34,12 @@ class EndpointMetrics:
 
 
 class MetricsCollector:
-    """Collects metrics for the API."""
+    """Collects metrics for the API.
+
+    Note: State is per-process. When running multiple Gunicorn workers,
+    each worker maintains its own metrics. Use a shared store (e.g. Redis
+    or Prometheus) if aggregated cross-worker metrics are needed.
+    """
 
     def __init__(self):
         """Initialize metrics collector."""

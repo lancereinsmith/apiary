@@ -36,6 +36,13 @@ curl <https://yourdomain.com/health/ready>
 curl <https://yourdomain.com/metrics>
 ```
 
+!!! note "Multi-Worker Limitation"
+    Metrics and rate limiting use in-memory storage, so each Gunicorn worker
+    maintains its own counters. With multiple workers, the `/metrics` endpoint
+    shows per-worker data and rate limits are effectively multiplied by the
+    number of workers. For aggregated metrics across workers, use an external
+    collector like Prometheus or Redis.
+
 ## Logs
 
 ```bash

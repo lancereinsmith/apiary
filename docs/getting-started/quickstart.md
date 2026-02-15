@@ -416,7 +416,7 @@ lsof -i:8000
 
 # Use different port
 uvicorn app:api --port 8001
-# Or: uv run apiary serve 127.0.0.1 8001
+# Or: uv run apiary serve --port 8001
 ```
 
 ### Endpoint Not Found

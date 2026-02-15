@@ -146,7 +146,7 @@ pytest --cov        # With coverage
 # Use different port
 uvicorn app:api --port 8001
 # Or use CLI
-uv run apiary serve 127.0.0.1 8001
+uv run apiary serve --port 8001
 ```
 
 ### Settings File Not Found

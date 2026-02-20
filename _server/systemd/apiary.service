@@ -8,7 +8,7 @@ Group=www-data
 WorkingDirectory=%h/apiary
 Environment="PATH=%h/apiary/.venv/bin"
 Environment="SECRET_KEY=your_secret_key_here"
-ExecStart=%h/apiary/.venv/bin/gunicorn -b unix:apiary.sock -w 4 -k uvicorn.workers.UvicornWorker -m 007 app:api --name apiary --chdir %h/apiary --access-logfile %h/apiary/logs/access.log --error-logfile %h/apiary/logs/errors.log --user ubuntu
+ExecStart=%h/apiary/.venv/bin/gunicorn -b unix:%h/apiary/apiary.sock -w 4 -k uvicorn.workers.UvicornWorker -m 007 app:api --name apiary --chdir %h/apiary --access-logfile %h/apiary/logs/access.log --error-logfile %h/apiary/logs/errors.log
 
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed

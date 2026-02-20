@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User=ubuntu
-Group=nginx
+Group=www-data
 WorkingDirectory=%h/apiary
 Environment="PATH=%h/apiary/.venv/bin"
 Environment="SECRET_KEY=your_secret_key_here"

@@ -5,6 +5,20 @@ All notable changes to Apiary will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-02-20
+
+### Added
+
+- **AWS Lightsail install script**: `_server/scripts/install.sh` automates full server setup — installs system packages (`git`, `nginx`, `curl`, `certbot`), installs `uv`, clones the repository, syncs production dependencies, initializes config, generates a random 256-bit `SECRET_KEY`, configures nginx and systemd, and enables the service
+- **Update script**: `_server/scripts/update.sh` provides a one-command update workflow (`git pull` → `uv sync` → `systemctl restart`)
+- **Deployment docs**: Updated `server-setup.md` to lead with the automated install script; updated `updating.md` to document `update.sh` as the recommended update path
+
+### Fixed
+
+- **systemd service**: Changed `Group=nginx` to `Group=www-data` — on Ubuntu/Debian, nginx runs as `www-data`, not `nginx` (which is an RHEL/CentOS convention)
+
+---
+
 ## [0.1.1] - 2026-02-14
 
 ### Fixed
@@ -126,6 +140,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Upgrade Notes
 
+#### From 0.1.1 to 0.2.0
+
+- **systemd service**: If you have an existing deployment, update the `Group=` in your service file: `sudo sed -i 's/Group=nginx/Group=www-data/' /etc/systemd/system/apiary.service && sudo systemctl daemon-reload && sudo systemctl restart apiary`
+- No API or configuration changes — this release is purely infrastructure and tooling.
+
 #### From 0.1.0 to 0.1.1
 
 - **CLI**: `apiary serve HOST PORT` is now `apiary serve --host HOST --port PORT`. The old positional syntax no longer works.
@@ -140,4 +159,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [0.1.0]: https://github.com/lancereinsmith/apiary/releases/tag/v0.1.0
 [0.1.1]: https://github.com/lancereinsmith/apiary/releases/tag/v0.1.1
-[Unreleased]: https://github.com/lancereinsmith/apiary/compare/v0.1.1...HEAD
+[0.2.0]: https://github.com/lancereinsmith/apiary/releases/tag/v0.2.0
+[Unreleased]: https://github.com/lancereinsmith/apiary/compare/v0.2.0...HEAD

@@ -5,15 +5,27 @@ files are gitignored, so you can safely pull updates without conflicts.
 
 ## Update Workflow
 
+### Automated (Recommended)
+
+Use the included `update.sh` script from anywhere on the server:
+
+```bash
+bash ~/apiary/_server/scripts/update.sh
+```
+
+It runs `git pull`, syncs dependencies, and restarts the service in one step.
+
+### Manual
+
 ```bash
 # Navigate to your deployment directory
-cd /path/to/apiary
+cd ~/apiary
 
 # Pull the latest changes (your config is safe!)
 git pull origin main
 
 # Update dependencies if needed
-uv sync
+uv sync --frozen --no-dev
 
 # Restart the service
 sudo systemctl restart apiary
@@ -134,31 +146,17 @@ Always check these resources before updating production deployments.
 
 ## Automatic Updates (Advanced)
 
-For automated updates, create a script:
+For automated or scheduled updates, use the included `update.sh`:
 
 ```bash
-#!/bin/bash
-# update-apiary.sh - Automated update script
+bash ~/apiary/_server/scripts/update.sh
+```
 
-set -e
+You can schedule it via cron or a systemd timer. Example cron entry to update
+nightly at 2 AM:
 
-cd /path/to/apiary
-
-# Pull latest changes
-git pull origin main
-
-# Update dependencies
-uv sync
-
-# Test the update (validates config and tests imports)
-uv run apiary test
-
-# Restart service
-sudo systemctl restart apiary
-
-# Check if service is running
-sleep 2
-sudo systemctl is-active --quiet apiary && echo "✓ Service updated successfully" || echo "✗ Service failed to start"
+```bash
+0 2 * * * /bin/bash /home/ubuntu/apiary/_server/scripts/update.sh >> /home/ubuntu/apiary/logs/update.log 2>&1
 ```
 
 ## Version Pinning

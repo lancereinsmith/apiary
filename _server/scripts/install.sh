@@ -97,13 +97,15 @@ step "Secret key"
 SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
 info "Generated a random 256-bit secret key"
 
-# ── nginx group for socket access ──────────────────────────────────────────
-step "nginx group"
-if ! id -nG "$USER" | grep -qw nginx; then
-    sudo usermod -aG nginx "$USER"
-    info "Added $USER to the nginx group (re-login required for group to take effect)"
+# ── www-data group for socket access ───────────────────────────────────────
+# On Ubuntu/Debian, nginx runs as www-data (not nginx as on RHEL/CentOS).
+# gunicorn creates the unix socket with Group=www-data so nginx can read it.
+step "www-data group"
+if ! id -nG "$USER" | grep -qw www-data; then
+    sudo usermod -aG www-data "$USER"
+    info "Added $USER to the www-data group (re-login required for group to take effect)"
 else
-    info "$USER is already in the nginx group"
+    info "$USER is already in the www-data group"
 fi
 
 # ── nginx config ───────────────────────────────────────────────────────────

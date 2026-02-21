@@ -19,5 +19,5 @@ COPY . /app
 
 EXPOSE 8000
 
-# Use uv run to execute the application
-CMD ["uv", "run", "--no-dev", "uvicorn", "app:api", "--host", "0.0.0.0", "--port", "8000"]
+# Validate config before starting — fails fast if endpoints.json or settings.json are invalid
+CMD ["sh", "-c", "uv run --no-dev apiary validate-config && uv run --no-dev uvicorn app:api --host 0.0.0.0 --port 8000"]

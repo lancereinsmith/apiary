@@ -11,6 +11,7 @@ The CLI is built with [Click](https://click.palletsprojects.com/) and provides a
 - Backing up configuration and custom code
 - Testing application before deployment
 - Cleaning up generated files
+- Managing the Docker container (`docker up`, `docker down`, `docker restart`)
 
 ## Installation
 

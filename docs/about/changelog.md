@@ -5,6 +5,24 @@ All notable changes to Apiary will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-02-21
+
+### Added
+
+- **Docker Compose support**: `docker-compose.yml` runs the application on host port 3002
+  with `config/` and `services/` bind-mounted as volumes for live editing without rebuilds
+- **Config validation at container startup**: Dockerfile CMD now runs `apiary test` before
+  launching uvicorn — the container exits immediately if `settings.json` or `endpoints.json`
+  are invalid
+- **`apiary docker` CLI commands**: New subcommand group for managing the Docker container:
+  - `apiary docker up [--build]` — start the container in the background; `--build` rebuilds the image first
+  - `apiary docker down` — stop and remove the container
+  - `apiary docker restart` — restart the container (use after editing mounted volumes)
+- **Docker deployment docs**: `docs/deployment/docker.md` covers volumes, startup validation,
+  and the typical edit→restart workflow
+
+---
+
 ## [0.2.0] - 2026-02-20
 
 ### Added
@@ -140,6 +158,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Upgrade Notes
 
+#### From 0.2.0 to 0.3.0
+
+- No API or configuration changes — this release adds Docker Compose support and CLI docker commands.
+- If you already have a `docker-compose.yml`, replace it with the new one (port 3002, mounted volumes).
+- The Dockerfile CMD now runs `apiary test` on startup; ensure `config/settings.json` and
+  `config/endpoints.json` exist and are valid before starting the container.
+
 #### From 0.1.1 to 0.2.0
 
 - **systemd service**: If you have an existing deployment, update the `Group=` in your service file: `sudo sed -i 's/Group=nginx/Group=www-data/' /etc/systemd/system/apiary.service && sudo systemctl daemon-reload && sudo systemctl restart apiary`
@@ -160,4 +185,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.0]: https://github.com/lancereinsmith/apiary/releases/tag/v0.1.0
 [0.1.1]: https://github.com/lancereinsmith/apiary/releases/tag/v0.1.1
 [0.2.0]: https://github.com/lancereinsmith/apiary/releases/tag/v0.2.0
-[Unreleased]: https://github.com/lancereinsmith/apiary/compare/v0.2.0...HEAD
+[0.3.0]: https://github.com/lancereinsmith/apiary/releases/tag/v0.3.0
+[Unreleased]: https://github.com/lancereinsmith/apiary/compare/v0.3.0...HEAD

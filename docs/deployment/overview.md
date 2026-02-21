@@ -14,36 +14,14 @@ See [Server Setup](server-setup.md) for details.
 
 ### 2. Docker
 
-```dockerfile
-FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
-
-WORKDIR /app
-
-# Enable bytecode compilation for faster startup
-ENV UV_COMPILE_BYTECODE=1
-# Prevent uv from creating a cache directory
-ENV UV_NO_CACHE=1
-
-# Copy dependency files first for better caching
-COPY pyproject.toml uv.lock ./
-
-# Install dependencies (no dev groups in production)
-RUN uv sync --frozen --no-dev
-
-# Copy application code
-COPY . /app
-
-EXPOSE 8000
-
-# Use uv run to execute the application
-CMD ["uv", "run", "--no-dev", "uvicorn", "app:api", "--host", "0.0.0.0", "--port", "8000"]
-```
+Apiary includes a `Dockerfile` and `docker-compose.yml`. Config and services are
+bind-mounted so you can edit them without rebuilding the image.
 
 ```bash
-docker build -t apiary .
-
-docker run -p 8000:8000 --name apiary-app apiary
+uv run apiary docker up --build
 ```
+
+See [Docker Deployment](docker.md) for full details.
 
 ## Quick Deployment Checklist
 
@@ -122,6 +100,7 @@ See [Updating Your Deployment](updating.md) for comprehensive update workflows, 
 
 ## Next Steps
 
+- [Docker Deployment](docker.md) - Docker and docker-compose setup
 - [Server Setup](server-setup.md) - Detailed server setup
 - [Configuration](configuration.md) - Production configuration
 - [Monitoring](monitoring.md) - Set up monitoring

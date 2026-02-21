@@ -82,6 +82,7 @@ nav:
     - Built-in Endpoints: guide/builtin-endpoints.md
   - Deployment:
     - Overview: deployment/overview.md
+    - Docker: deployment/docker.md
     - Updating: deployment/updating.md
     - Server Setup: deployment/server-setup.md
     - Configuration: deployment/configuration.md

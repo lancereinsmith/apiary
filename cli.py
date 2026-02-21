@@ -436,6 +436,42 @@ def backup(config_dir: str, backup_dir: str, include_custom: bool):
             click.echo(f"   cp -r {backup_path}/routers_custom/* routers_custom/")
 
 
+@cli.group()
+def docker():
+    """Manage the application Docker container via docker compose."""
+    pass
+
+
+@docker.command()
+@click.option("--build", is_flag=True, help="Rebuild images before starting")
+def up(build: bool) -> None:
+    """Start the application container in the background.
+
+    Pass --build to rebuild the image first (required after code changes
+    outside of the mounted config/ and services/ volumes).
+    """
+    cmd = ["docker", "compose", "up", "-d"]
+    if build:
+        cmd.append("--build")
+    run_command(cmd, "Starting Docker container")
+
+
+@docker.command()
+def down() -> None:
+    """Stop and remove the application container."""
+    run_command(["docker", "compose", "down"], "Stopping Docker container")
+
+
+@docker.command()
+def restart() -> None:
+    """Restart the running application container.
+
+    Use this after editing files in the mounted config/ or services/ volumes
+    so the application picks up the changes.
+    """
+    run_command(["docker", "compose", "restart"], "Restarting Docker container")
+
+
 @cli.command()
 def clean():
     """Clean up generated files and caches."""

@@ -5,6 +5,18 @@ All notable changes to Apiary will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-02-21
+
+### Fixed
+
+- **nginx static file serving**: Removed the `location /static` nginx block that was causing
+  CSS files to return `text/html` (MIME type mismatch) and favicon/image requests to 403.
+  All requests now proxy through to FastAPI, which serves static files correctly via its
+  mounted `StaticFiles` handler
+- **nginx syntax error**: Added missing opening `{` brace on the `location /` block
+
+---
+
 ## [0.3.0] - 2026-02-21
 
 ### Added
@@ -158,6 +170,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Upgrade Notes
 
+#### From 0.3.0 to 0.3.1
+
+- **nginx config**: Apply the updated `_server/nginx/apiary.nginx` to your server:
+  ```bash
+  sudo cp ~/apiary/_server/nginx/apiary.nginx /etc/nginx/sites-available/apiary
+  sudo nginx -t && sudo systemctl reload nginx
+  ```
+
 #### From 0.2.0 to 0.3.0
 
 - No API or configuration changes — this release adds Docker Compose support and CLI docker commands.
@@ -186,4 +206,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.1]: https://github.com/lancereinsmith/apiary/releases/tag/v0.1.1
 [0.2.0]: https://github.com/lancereinsmith/apiary/releases/tag/v0.2.0
 [0.3.0]: https://github.com/lancereinsmith/apiary/releases/tag/v0.3.0
-[Unreleased]: https://github.com/lancereinsmith/apiary/compare/v0.3.0...HEAD
+[0.3.1]: https://github.com/lancereinsmith/apiary/releases/tag/v0.3.1
+[Unreleased]: https://github.com/lancereinsmith/apiary/compare/v0.3.1...HEAD

@@ -7,19 +7,12 @@ server {
     location /.well-known/acme-challenge/ {
         root /var/www/html;
     }
-    location /static {
-        gzip            on;
-        gzip_buffers    8 256k;
-
-        alias /home/ubuntu/apiary/static;
-        expires 365d;
-    }
-    location / 
+    location / {
         gzip            on;
         gzip_buffers    8 256k;
 
         include proxy_params;
-        proxy_pass http://unix:/home/ubuntu/apiary/apiary.sock;
+        proxy_pass http://127.0.0.1:3002;
     }
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
